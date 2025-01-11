@@ -1,88 +1,134 @@
-# Dynamic Web Scraper Using Crew AI and Ollama
+# Real Estate Web Scraper Using CrewAI
 
 ## Introduction
 
-This application serves as a dynamic web scraper designed to efficiently extract data from websites using Crew ai and Ollama Locally Hosted Models.It leverages the capabilities of the Ollama model, which is an alternative to OpenAI's GPT-4. 
+This application is a specialized web scraper designed to extract real estate data from property listing websites using CrewAI. It employs a multi-agent system that coordinates between web scraping and data analysis tasks to efficiently collect and organize property information.
 
-The choice to use Ollama over GPT-4 is primarily due to cost-effectiveness, as Ollama provides a more affordable solution while still delivering powerful natural language processing and understanding capabilities.
+## Features
 
-The application is built with flexibility in mind, allowing users to specify the type of data they wish to extract, and it is equipped to handle pagination for comprehensive data collection.
+- Automated web scraping of real estate listings
+- Intelligent data extraction of property details including:
+  - Property names
+  - Prices
+  - Locations
+  - Property features
+- Automatic file output generation based on website hostname
+- Multi-agent coordination using CrewAI
 
+## Components
 
-## Tools
+The application uses two specialized agents:
 
-This web scraper is built using a combination of Python libraries and frameworks, each contributing to different aspects of the application:
+1. **Web Scraper Agent**: Responsible for efficiently crawling the real estate website and extracting raw HTML content.
 
-- **LangChain**: Provide tools for integrating large language models (LLMs) like Ollama into applications, as well as utilities for text splitting and HTML-to-text transformation.
-- **CrewAI**: Facilitates the creation of agents and tasks, enabling a structured approach to web scraping and data extraction.
-- **Requests**: A popular HTTP library for Python, used to send HTTP requests and interact with web pages.
-- **BeautifulSoup**: A Python library for parsing HTML and XML documents, used for web scraping and extracting data from web pages.
-- **Dotenv**: A Python library that allows the application to load environment variables from a `.env` file, keeping sensitive information like API keys secure.
-- **Urllib**: A Python module used for URL handling, helping to parse and construct URLs.
-- **JSON**: A lightweight data interchange format, used for storing and exchanging the extracted data.
-- **Re**: The Python module for working with regular expressions, which helps in identifying patterns in text, such as pagination links.
+2. **Data Analyzer Agent**: Processes the raw HTML to extract structured property information.
+
+## Tools & Dependencies
+
+- **CrewAI**: Framework for creating and coordinating AI agents
+- **CrewAI Tools**: Provides the ScrapeWebsiteTool for web scraping
+- **urllib**: Handles URL parsing and manipulation
+- **json**: Manages data serialization
 
 ## How It Works
 
-The application operates in several stages:
+1. The system initializes two specialized agents:
+   - A Web Scraper agent equipped with web scraping tools
+   - A Data Analyzer agent for parsing and organizing the extracted data
 
-1. **User Input**: The user is prompted to enter a list of properties they wish to extract from the target website, which is then used to create a JSON schema.
-2. **Web Scraping**: The application asks the user for the URL of the website they want to scrape. It then uses the BeautifulSoup library to navigate the HTML content and extract the text.
-3. **Data Extraction**: The extracted text is passed to an extraction agent powered by the Ollama model, which processes the text and extracts the relevant data based on the provided schema.
-4. **Pagination Handling**: If pagination is enabled, the application will automatically find the 'Next' link on the page and continue scraping subsequent pages until no further pages are found.
-5. **Data Storage**: The extracted data is saved in a JSON file for later use or analysis.
+2. The process follows two main tasks:
+   - First task scrapes the raw HTML content from the specified website
+   - Second task analyzes the content to extract specific property information
 
-## Example/Demo
+3. The extracted data includes:
+   - Property names
+   - Price information
+   - Location details
+   - Available property features
 
-Here's a brief demonstration of how the application works:
+4. Results are automatically saved to a markdown file named after the website's hostname
 
-1. The user inputs the properties they want to extract, such as "type_of_property_listed, location_of_property_listed, size_of_property_listed,price_of_property_listed, purpose_of_property_listed".
-2. They then provide the URL of the OLX or Zameen listing page they wish to scrape such as "https://www.zameen.com/Homes/Islamabad-3-1.html".
-3. The web scraper agent begins its task, scraping the website content and passing the data to the extraction agent.
-4. The extraction agent processes the content, extracting information matching the user-defined schema.
-5. The extracted data is appended to a JSON file named `zameen_scraped_data.json`.
+## Setup & Installation
 
-## How to Start
+### 1. Prerequisites
 
-To run the application, follow these steps:
+- Python 3.8 or higher
+- pip (Python package installer)
 
-1. Ensure you have Python installed on your system.
-2. Clone the repository to your local machine.
-3. Install the required dependencies by running `pip install -r requirements.txt`.
-4. Create a `.env` file in the root directory and define the `MODEL_NAME` and `PAGINATION` and `FILE_NAME` environment variables.
-5. Run the application by executing `python scraper.py` in your terminal.
-6. Follow the on-screen prompts to input the properties and URL for scraping.
+### 2. Installation Steps
 
-### Setting Up Ollama
-- **Install Ollama**: Ensure that Ollama is properly installed in your environment. Follow the installation guide provided by Ollama for detailed instructions.
+1. Clone the repository:
 
-### Integrating Ollama with CrewAI
-- Instantiate Ollama Model: Create an instance of the Ollama model. You can specify the model and the base URL during instantiation. For example:
-
-```python
-from langchain.llms import Ollama
-ollama_openhermes = Ollama(model="agent")
-# Pass Ollama Model to Agents: When creating your agents within the CrewAI framework, you can pass the Ollama model as an argument to the Agent constructor. For instance:
-
-def local_expert(self):
-	return Agent(
-		role='Local Expert at this city',
-		goal='Provide the BEST insights about the selected city',
-		backstory="""A knowledgeable local guide with extensive information
-		about the city, it's attractions and customs""",
-		tools=[
-			SearchTools.search_internet,
-			BrowserTools.scrape_and_summarize_website,
-		],
-		llm=ollama_openhermes, # Ollama model passed here
-		verbose=True
-	)
+```bash
+git clone https://github.com/ThatNinjaGuy/website-scraper
+cd website-scraper
 ```
 
-### Advantages of Using Local Models
-- **Privacy**: Local models allow processing of data within your own infrastructure, ensuring data privacy.
-- **Customization**: You can customize the model to better suit the specific needs of your tasks.
-- **Performance**: Depending on your setup, local models can offer performance benefits, especially in terms of latency.
+2. Install the required dependencies:
 
+```bash
+pip install -r requirements.txt
+```
 
-Before running the application, make sure you have read and understood the terms of service of the website you intend to scrape, as web scraping may not be allowed on some websites without permission.
+This will install:
+
+- langchain-community
+- crewai and crewai[tools]
+- requests
+- beautifulsoup4
+- python-dotenv
+- langchain-experimental
+- duckduckgo-search
+- html2text
+
+### 3. Environment Configuration
+
+1. Create a `.env` file in the root directory:
+
+```bash
+touch .env
+```
+
+2. Add your OpenAI API key to the `.env` file:
+
+```env
+OPENAI_API_KEY=your_api_key_here
+```
+
+Replace `your_api_key_here` with your actual OpenAI API key.
+
+> ⚠️ **Security Note**: Never commit your `.env` file to version control. Make sure it's included in your `.gitignore`.
+
+## Running the Scraper
+
+1. Ensure all dependencies are installed and `.env` file is configured
+2. Run the scraper:
+
+```bash
+python web-scraper.py
+```
+
+## Output
+
+The scraper generates a markdown file containing the extracted information. The filename is automatically generated based on the website's hostname (e.g., `www-magicbricks-com.md`).
+
+## Important Notes
+
+- Ensure you have the required dependencies installed
+- Verify that you have permission to scrape the target website
+- Be mindful of the website's robots.txt file and scraping policies
+- Consider implementing rate limiting for production use
+- Keep your API keys secure and never share them publicly
+- The scraper requires an active internet connection
+
+## Troubleshooting
+
+Common issues and solutions:
+
+- If you get an API key error, verify your `.env` file is properly configured
+- If dependencies fail to install, try upgrading pip: `pip install --upgrade pip`
+- For SSL certificate errors, ensure your Python installation has proper SSL certificates
+
+## License
+
+[Your License Here]
