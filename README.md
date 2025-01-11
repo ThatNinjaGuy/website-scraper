@@ -110,7 +110,9 @@ python web-scraper.py
 
 ## Output
 
-The scraper generates a markdown file containing the extracted information. The filename is automatically generated based on the website's hostname (e.g., `www-magicbricks-com.md`).
+The scraper generates a markdown file containing the extracted information. The filename is automatically generated based on the website's hostname (e.g., `www-magicbricks-com.md`). Here's an example of the output format:
+
+[View example output](www-magicbricks-com.md)
 
 ## Important Notes
 
